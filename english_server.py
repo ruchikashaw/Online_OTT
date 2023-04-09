@@ -8,10 +8,9 @@ s.bind(("localhost", 5021))
 s.listen(1)
 print("Waiting for connections...")
 
-cli, addr = s.accept()
-print("Connected client:", addr)
-
 while True:
+    cli, addr = s.accept()
+    print("Connected client:", addr)
     data = cli.recv(1024).decode('utf-8')
     # msg = data.decode('utf-8')
 
@@ -21,17 +20,13 @@ while True:
     
     result = " "
     equation = data.split(" ")
+    print(equation)
     genre = equation[1]
 
-    if genre == "Horror":
+    if genre == "horror":
         PORT = 5024
-    elif genre == "Detective":
-        PORT = 5025
-    elif genre == "Comedy":
+    elif genre == "comedy":
         PORT = 5026
-    elif genre == "Romance":
-        PORT = 5027
-   
     
     new_s = socket.socket()
     new_s.connect(("localhost", PORT))
@@ -40,4 +35,5 @@ while True:
     new_s.close()
 
     cli.send(result)
+    cli.close()
 

@@ -1,23 +1,26 @@
 import socket
+import json 
 
 s = socket.socket()
 
 s.bind(("localhost", 5030))
 
-
 s.listen(1)
 print("Waiting for connections...")
 
-cli, addr = s.accept()
-print("Connected client:", addr)
+mov = None
+with open('comedy.json','r') as f:
+    mov = json.load(f)
 
-data = cli.recv(1024)
+while True:
+    cli, addr = s.accept()
+    print("Connected client:", addr)
 
+    data = cli.recv(1024)
 
+    result = json.dumps(mov)
 
-result = "Golmaal"
+    cli.send(result.encode('utf-8'))
 
-cli.send(str(result).encode('utf-8'))
-
-
-cli.close()
+    cli.close()
+s.close()
