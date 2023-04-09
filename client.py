@@ -1,4 +1,5 @@
 import socket
+import json
 
 
 client = socket.socket(socket.AF_INET,
@@ -8,16 +9,17 @@ client.connect(("localhost", 9999))
 
 while True:
 	
-	inp = input("Enter the language you would like to see and the genre you would like to prefer: ")
-	if inp == "Over":
+	inp = input("Enter the language you would like to see and the genre you would like to prefer (Sample Input: English Comedy): \n>")
+	if inp.lower() == "Over":
 		break
 	
-	
-	client.send(inp.encode())
-
+	client.send(inp.lower().encode())
 	
 	answer = client.recv(1024)
-	print(answer.decode())
+	res = json.loads(answer.decode())
+	for mov in res:
+		print("---------------\nMovie Name: {}\nYear Released: {}\nRating: {}\n---------------".format(mov["Title"], mov["Released"], mov["Rating"]))
+
 	print("Type 'Over' to terminate")
 
 client.close()
